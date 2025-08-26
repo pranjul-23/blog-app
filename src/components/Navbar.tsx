@@ -1,8 +1,24 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import type { RootState } from "../store/store";
+import { logout } from "../store/slices/auth/auth.slice";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const linkClass = (path: string) =>
+    location.pathname === path ? "text-white" : "text-gray-300";
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
 
   return (
     <nav className="relative bg-gray-800/50 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10">
@@ -23,22 +39,37 @@ const Navbar = () => {
           <div className="hidden sm:flex space-x-6">
             <Link
               to="/"
-              className="text-sm font-medium text-gray-300 hover:text-white"
+              className={`text-sm font-medium hover:text-white 
+                ${linkClass("/")}`}
             >
               Home
             </Link>
-            <Link
-              to="/login"
-              className="text-sm font-medium text-gray-300 hover:text-white"
-            >
-              Login
-            </Link>
-            <Link
-              to="/signup"
-              className="text-sm font-medium text-gray-300 hover:text-white"
-            >
-              Signup
-            </Link>
+            {!isAuthenticated && (
+              <Link
+                to="/login"
+                className={`text-sm font-medium hover:text-white 
+                ${linkClass("/login")}`}
+              >
+                Login
+              </Link>
+            )}
+            {!isAuthenticated && (
+              <Link
+                to="/signup"
+                className={`text-sm font-medium hover:text-white 
+                ${linkClass("/signup")}`}
+              >
+                Signup
+              </Link>
+            )}
+            {isAuthenticated && (
+              <span
+                className="text-sm font-medium text-gray-300 hover:text-white cursor-pointer"
+                onClick={handleLogout}
+              >
+                Logout
+              </span>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
