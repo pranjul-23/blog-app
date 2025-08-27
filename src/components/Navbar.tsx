@@ -1,22 +1,20 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import type { RootState } from "../store/store";
-import { logout } from "../store/slices/auth/auth.slice";
+import { useAppDispatch, useAppSelector } from "../hooks";
+// import { logout } from "../store/slices/auth/auth.slice";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const linkClass = (path: string) =>
     location.pathname === path ? "text-white" : "text-gray-300";
 
   const handleLogout = () => {
-    dispatch(logout());
+    // dispatch(logout());
     navigate("/login");
   };
 

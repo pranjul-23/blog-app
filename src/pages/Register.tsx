@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { signup } from "../store/slices/auth/auth.slice";
+import { useAppDispatch } from "../hooks";
+import { signupUserThunk } from "../store/slices/auth/auth.slice";
 import { useNavigate } from "react-router-dom";
 
 const Register: React.FC = () => {
@@ -9,7 +9,7 @@ const Register: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [emailErrorMsg, setEmailErrorMsg] = useState<string>("");
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +36,7 @@ const Register: React.FC = () => {
     e.preventDefault();
     if (!emailErrorMsg?.length) {
       const user = { name, email, password };
-      dispatch(signup(user));
+      dispatch(signupUserThunk(user));
       navigate("/");
     }
   };
